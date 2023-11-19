@@ -15,9 +15,9 @@ In this app we are using Spring Data JPA for built-in methods to do CRUD operati
 
 
 ## Tools
-- Eclipse or IntelliJ IDEA (or any preferred IDE) with embedded Gradle
+- Eclipse or IntelliJ IDEA (or any preferred IDE)
 - Maven (version >= 3.6.0)
-- Postman (or any RESTful API testing tool)
+- Swagger UI (or any RESTful API testing tool)
 
 
 <br/>
@@ -40,7 +40,7 @@ Or
 
 ||
 |  ---------    |
-| **_Note_** : In `SpringBootMongoDBApplication.java` class we have autowired both SuperHero and Employee repositories. <br/>If there is no record present in DB for any one of that module class (Employee or SuperHero), static data is getting inserted in DB from `HelperUtil.java` class when we are starting the app for the first time.| 
+| **_Note_** : In `SpringBootMongoDBApplication.java` class we have autowired Employee repositories. <br/>If there is no record present in DB for any one of that module class (Employee), static data is getting inserted in DB from `HelperUtil.java` class when we are starting the app for the first time.| 
 
 
 
@@ -68,7 +68,7 @@ Or
      ```
     spring.data.mongodb.host=localhost
     spring.data.mongodb.port=27017
-    spring.data.mongodb.database=spring_boot_mongo_app
+    spring.data.mongodb.database=database_name
     spring.jackson.default-property-inclusion=NON_NULL
     #logging.level.ROOT=DEBUG  
      ```
@@ -76,28 +76,7 @@ Or
    
 3. #### Model class
     Below are the model classes which we will store in MongoDB and perform CRUD operations.  
-    **com.spring.mongo.demo.model.SuperHero.java**  
-    ```
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    @Document(collection = "super_hero")
-    public class SuperHero implements Serializable {
-    
-        @Id
-        private String id;
-    
-        private String name;
-        private String superName;
-        private String profession;
-        private int age;
-        private boolean canFly;
-    
-        // Constructor, Getter and Setter
-    }
-    ```
-    **com.spring.mongo.demo.model.Employee.java**  
+    **model.com.demo.Employee.java**  
     ```
     @Data
     @AllArgsConstructor
@@ -117,91 +96,12 @@ Or
     }
    ```
    
-   
-4. #### CRUD operation for Super Heroes
-
-    In **com.spring.mongo.demo.controller.SuperHeroController.java** class, 
-    we have exposed 5 endpoints for basic CRUD operations
-    - GET All Super Heroes
-    - GET by ID
-    - POST to store Super Hero in DB
-    - PUT to update Super Hero
-    - DELETE by ID
-    
-    ```
-    @RestController
-    @RequestMapping("/super-hero")
-    public class SuperHeroController {
-        
-        @GetMapping
-        public ResponseEntity<List<?>> findAll();
-    
-        @GetMapping("/{id}")
-        public ResponseEntity<?> findById(@PathVariable String id);
-    
-        @PostMapping
-        public ResponseEntity<?> save(@RequestBody SuperHero superHero);
-    
-        @PutMapping
-        public ResponseEntity<?> update(@RequestBody SuperHero superHero);
-    
-        @DeleteMapping("/{id}")
-        public ResponseEntity<?> delete(@PathVariable String id);
-    }
-    ```
-   
-    In **com.spring.mongo.demo.repository.SuperHeroRepository.java**, we are extending `MongoRepository<Class, ID>` interface which enables CRUD related methods.
-    ```
-    public interface SuperHeroRepository extends MongoRepository<SuperHero, String> {
-    }
-    ```
-   
-   In **com.spring.mongo.demo.service.impl.SuperHeroServiceImpl.java**, we are autowiring above interface using `@Autowired` annotation and doing CRUD operation.
-
-
-
-5. #### JPA And Query operation for Employee
-    In **com.spring.mongo.demo.controller.EmployeeController.java** class JPA related queries API Endpoints are placed.
-    In **com.spring.mongo.demo.controller.EmployeeQueryController.java** class Mongo queries API Endpoints are placed.
-    
- 
- 
+4. #### JPA And Query operation for Employee
+    In **controller.com.demo.EmployeeController.java** class JPA related queries API Endpoints are placed.
+    In **controller.com.demo.EmployeeQueryController.java** class Mongo queries API Endpoints are placed.
+     
     
 ### API Endpoints
-
-- #### Super Hero CRUD Operations
-    > **GET Mapping** http://localhost:8080/super-hero  - Get all Super Heroes
-    
-    > **GET Mapping** http://localhost:8080/super-hero/5f380dece02f053eff29b986  - Get Super Hero by ID
-       
-    > **POST Mapping** http://localhost:8080/super-hero  - Add new Super Hero in DB  
-    
-      Request Body  
-      ```
-        {
-            "name": "Tony",
-            "superName": "Iron Man",
-            "profession": "Business",
-            "age": 50,
-            "canFly": true
-        }
-      ```
-    
-    > **PUT Mapping** http://localhost:8080/super-hero  - Update existing Super Hero for given ID 
-                                                       
-      Request Body  
-      ```
-        {
-            "id": "5f380dece02f053eff29b986"
-            "name": "Tony",
-            "superName": "Iron Man",
-            "profession": "Business",
-            "age": 50,
-            "canFly": true
-        }
-      ```
-    
-    > **DELETE Mapping** http://localhost:8080/super-hero/5f380dece02f053eff29b986  - Delete Super Hero by ID
 
 - #### Employee Get Operations using JPA
     > **GET Mapping** http://localhost:8080/employee-jpa  - Get all Employees 

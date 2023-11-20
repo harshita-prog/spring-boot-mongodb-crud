@@ -16,7 +16,6 @@ public class Employee implements Serializable {
 
 	@Id
 	private String id;
-
 	private int empId;
 	private String firstName;
 	private String lastName;
